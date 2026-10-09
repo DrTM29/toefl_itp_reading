@@ -1262,7 +1262,7 @@ function s2LoadQ(){
         lbl.textContent=labels[optIdx];
         span.appendChild(lbl);
         span.appendChild(document.createTextNode(part.t));
-        span.addEventListener('click',()=>s2SelectWE(span,optIdx));
+        span.addEventListener('click',()=>s2SelectWE(span,parseInt(span.dataset.idx,10)));
         sentDiv.appendChild(span);
         optIdx++;
       }
