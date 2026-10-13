@@ -223,17 +223,28 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .s3-q-panel{display:flex;flex-direction:column;gap:12px;overflow-y:auto;max-height:calc(100vh - 80px);padding-bottom:4px;}
 .s3-qcard{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border:2px solid var(--border);}
 .s3-qcard-hdr{background:var(--surface2);padding:8px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;border-radius:var(--radius) var(--radius) 0 0;}
-.s3-qnum{font-size:11px;font-weight:700;color:var(--s3);}
+.s3-qnum-wrap{display:flex;align-items:center;gap:7px;}
+.s3-qnum{font-size:11px;font-weight:700;color:var(--s3);padding:2px 8px;border-radius:5px;border:2px dashed transparent;transition:all .25s;}
+.s3-qnum.pulse{border-color:var(--accent);animation:s3pulse 1.2s ease-in-out infinite;}
+@keyframes s3pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 40%,transparent);}50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 0%,transparent);}}
+.s3-click-label{font-size:10.5px;font-weight:700;color:var(--accent);letter-spacing:.3px;white-space:nowrap;transition:opacity .2s;}
+.s3-click-label.hidden{opacity:0;pointer-events:none;}
 .s3-ans-mark{font-size:11px;font-weight:600;display:none;}
 .s3-qcard-body{padding:12px 14px;}
 .s3-qtext{font-size:13px;font-weight:500;margin-bottom:10px;line-height:1.6;}
-/* evidence hint */
-.s3-ev-hint{font-size:12px;font-weight:600;border-radius:8px;padding:9px 13px;margin-bottom:9px;display:flex;align-items:center;gap:7px;border:2px solid var(--border);background:var(--surface2);color:var(--text3);transition:all .25s;}
-.s3-ev-hint.ev-sel{background:var(--s3-light);border-color:var(--s3);color:#065f46;}
-.s3-ev-hint .ev-icon{font-size:16px;flex-shrink:0;}
-.s3-ev-hint .ev-main{font-size:11px;}
-.s3-ev-hint .ev-excerpt{display:none;font-size:10px;color:var(--s3);font-weight:400;margin-top:2px;}
-.s3-ev-hint.ev-sel .ev-excerpt{display:block;}
+/* evidence hint — 3-step guide */
+.s3-ev-hint{border-radius:10px;padding:10px 13px;margin-bottom:9px;border:2px solid var(--border);background:var(--surface2);transition:all .25s;}
+.s3-ev-hint.ev-sel{background:var(--s3-light);border-color:var(--s3);}
+.s3-steps{display:flex;flex-direction:column;gap:5px;}
+.s3-step{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;line-height:1.45;}
+.s3-step-num{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:var(--border);color:var(--text3);transition:all .25s;}
+.s3-step-text{color:var(--text3);font-weight:500;padding-top:2px;transition:color .25s;}
+.s3-step.done .s3-step-num{background:var(--s3);color:#fff;}
+.s3-step.done .s3-step-text{color:var(--s3);text-decoration:line-through;opacity:.7;}
+.s3-step.active .s3-step-num{background:var(--accent);color:#fff;box-shadow:0 0 0 3px var(--accent-light);}
+.s3-step.active .s3-step-text{color:var(--accent);font-weight:700;}
+.s3-ev-excerpt{display:none;margin-top:6px;padding:5px 9px;border-radius:6px;background:var(--s3-light);border-left:3px solid var(--s3);font-size:10.5px;color:#065f46;font-style:italic;line-height:1.5;}
+.s3-ev-hint.ev-sel .s3-ev-excerpt{display:block;}
 .s3-choices{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
 .s3-choice{display:flex;align-items:flex-start;gap:8px;padding:9px 12px;border-radius:7px;border:2px solid var(--border);background:var(--surface);cursor:pointer;font-size:12px;font-family:'Noto Sans JP',sans-serif;text-align:left;color:var(--text);line-height:1.5;width:100%;transition:all .15s;}
 .s3-choice:hover{border-color:var(--s3);background:var(--s3-light);}
@@ -550,15 +561,15 @@ const WE = [
 ,{sentence:[{t:"The government's decision to privatize the state-owned utility company was ",u:false},{t:"fierce",u:true},{t:" opposed by labor unions, who argued that it would result in job losses and higher prices for ",u:false},{t:"ordinary",u:true},{t:" ",u:false},{t:"consumers",u:true},{t:" and small ",u:false},{t:"businesses",u:true},{t:"."}],answer:0,correct:"fiercely",explanation:"was opposed（受動態）を修飾するので副詞fiercely（強く）が正しい。",syntax:"be + 副詞 + 過去分詞。was fiercely opposed = 強く反対された。",vocab:[{word:"privatize",meaning:"民営化する"},{word:"utility company",meaning:"公益事業会社"},{word:"fiercely",meaning:"激しく"}]}
 ,{sentence:[{t:"The commission recommended that the government ",u:false},{t:"undertakes",u:true},{t:" a comprehensive review of the existing regulatory framework before introducing any new legislation affecting the financial services ",u:false},{t:"sector",u:true},{t:" and its ",u:false},{t:"various",u:true},{t:" ",u:false},{t:"stakeholders",u:true},{t:"."}],answer:0,correct:"undertake",explanation:"recommend that ～ の後は仮定法現在（動詞原形）。undertakes → undertakeが正しい。",syntax:"recommend that S + 動詞原形（仮定法現在）。三単現のsは不要。",vocab:[{word:"comprehensive",meaning:"包括的な"},{word:"regulatory",meaning:"規制の"},{word:"framework",meaning:"枠組み"}]}
 ,{sentence:[{t:"The vast majority of the residents surveyed ",u:false},{t:"expresses",u:true},{t:" strong support for the proposed development, citing the potential economic benefits and the creation of new job opportunities in the area ",u:false},{t:"as",u:true},{t:" their primary ",u:false},{t:"reason",u:true},{t:" for ",u:false},{t:"approval",u:true},{t:"."}],answer:0,correct:"expressed",explanation:"過去の調査結果を述べているので過去形expressed（表明した）が正しい。",syntax:"過去の完結した事実→過去形（単純過去）。surveyed と時制を合わせる。",vocab:[{word:"vast majority",meaning:"大多数"},{word:"cite",meaning:"挙げる"},{word:"approval",meaning:"賛成・承認"}]}
-,{sentence:[{t:"The rapidly ",u:false},{t:"changing",u:true},{t:" nature of the global economy has made it increasing difficult for workers to maintain ",u:false},{t:"long-term",u:true},{t:" employment in a single industry or ",u:false},{t:"even",u:true},{t:" a single ",u:false},{t:"company",u:true},{t:"."}],answer:1,correct:"increasingly",explanation:"made it increasingly difficult（形式目的語構文）。increasing → increasingly（副詞）が正しい。",syntax:"make it + 副詞 + 形容詞（形式目的語構文）。increasingly = ますます。",vocab:[{word:"maintain",meaning:"維持する"},{word:"increasingly",meaning:"ますます"},{word:"industry",meaning:"産業"}]}
+,{sentence:[{t:"The rapidly ",u:false},{t:"changing",u:true},{t:" nature of the global economy has made it ",u:false},{t:"increasing",u:true},{t:" difficult for workers to maintain ",u:false},{t:"long-term",u:true},{t:" employment in a single industry or ",u:false},{t:"even",u:true},{t:" a single company."}],answer:1,correct:"increasingly",explanation:"made it increasingly difficult（形式目的語構文）。increasing → increasingly（副詞）が正しい。",syntax:"make it + 副詞 + 形容詞（形式目的語構文）。increasingly = ますます。",vocab:[{word:"maintain",meaning:"維持する"},{word:"increasingly",meaning:"ますます"},{word:"industry",meaning:"産業"}]}
 ,{sentence:[{t:"Considerable progress ",u:false},{t:"have",u:true},{t:" been made in recent years in understanding the genetic basis of many previously poorly understood hereditary ",u:false},{t:"conditions",u:true},{t:", thanks largely to advances in genome ",u:false},{t:"sequencing",u:true},{t:" technology and ",u:false},{t:"bioinformatics",u:true},{t:"."}],answer:0,correct:"has",explanation:"主語「Considerable progress（単数・不可算名詞）」→ have → hasが正しい。",syntax:"progress は不可算名詞で単数扱い→ has been made。",vocab:[{word:"hereditary",meaning:"遺伝的な"},{word:"genome sequencing",meaning:"ゲノム解析"},{word:"bioinformatics",meaning:"バイオインフォマティクス"}]}
 ,{sentence:[{t:"The literary critic argued that the author's use of fragmented narrative and unreliable narrators ",u:false},{t:"reflects",u:true},{t:" a deliberate attempt to challenge readers to ",u:false},{t:"question",u:true},{t:" their ",u:false},{t:"own",u:true},{t:" assumptions about objective truth and ",u:false},{t:"factual",u:true},{t:" reality."}],answer:0,correct:"reflect",explanation:"主語「use ～ and unreliable narrators（複数の名詞句）」→ reflects → reflectが正しい。",syntax:"A and B（複数の主語）+ 複数動詞。use … and narrators → reflect。",vocab:[{word:"fragmented",meaning:"断片的な"},{word:"unreliable",meaning:"信頼できない"},{word:"deliberate",meaning:"意図的な"}]}
-,{sentence:[{t:"The negotiators were unable reaching ",u:false},{t:"a",u:true},{t:" final agreement before the deadline; the talks were adjourned with both parties agreeing to ",u:false},{t:"resume",u:true},{t:" discussions the following week, with fresh proposals to be tabled at the ",u:false},{t:"next",u:true},{t:" meeting at an agreed ",u:false},{t:"venue",u:true},{t:"."}],answer:0,correct:"to reach",explanation:"were unable to do（～できなかった）の構文。reaching → to reachが正しい。",syntax:"be unable to + 動詞原形 = ～できない。to不定詞が正しい形。",vocab:[{word:"adjourn",meaning:"延期する・休会する"},{word:"resume",meaning:"再開する"},{word:"proposal",meaning:"提案"}]}
+,{sentence:[{t:"The negotiators were unable ",u:false},{t:"reaching",u:true},{t:" a final agreement before the deadline; the talks were adjourned with both parties agreeing to ",u:false},{t:"resume",u:true},{t:" discussions the following week, with fresh proposals to be tabled at the ",u:false},{t:"next",u:true},{t:" meeting at an agreed ",u:false},{t:"venue",u:true},{t:"."}],answer:0,correct:"to reach",explanation:"were unable to do（～できなかった）の構文。reaching → to reachが正しい。",syntax:"be unable to + 動詞原形 = ～できない。to不定詞が正しい形。",vocab:[{word:"adjourn",meaning:"延期する・休会する"},{word:"resume",meaning:"再開する"},{word:"proposal",meaning:"提案"}]}
 ,{sentence:[{t:"The report's findings indicate that children from lower-income households are ",u:false},{t:"significant",u:true},{t:" more likely to experience food insecurity, which can have lasting negative effects on their cognitive development and ",u:false},{t:"academic",u:true},{t:" ",u:false},{t:"performance",u:true},{t:" throughout their school ",u:false},{t:"years",u:true},{t:"."}],answer:0,correct:"significantly",explanation:"are more likely（比較表現）を修飾するので副詞significantly（大幅に）が正しい。",syntax:"副詞 + 比較級。significantly more likely = 大幅に～しやすい。",vocab:[{word:"food insecurity",meaning:"食料不安"},{word:"cognitive",meaning:"認知の"},{word:"significantly",meaning:"大幅に"}]}
 ,{sentence:[{t:"The philosopher contended that the pursuit of happiness, rather than the accumulation of wealth or the achievement of fame, should be ",u:false},{t:"regard",u:true},{t:" as the ultimate goal of a well-lived human ",u:false},{t:"life",u:true},{t:" and the foundation of a ",u:false},{t:"just",u:true},{t:" and equitable ",u:false},{t:"society",u:true},{t:"."}],answer:0,correct:"regarded",explanation:"should be + 過去分詞（受動態）。regard → regardedが正しい。",syntax:"should be + 過去分詞（助動詞を含む受動態）。should be regarded = ～とみなされるべき。",vocab:[{word:"contend",meaning:"主張する"},{word:"accumulation",meaning:"蓄積"},{word:"regard",meaning:"みなす"}]}
 ,{sentence:[{t:"The marine biologists were astonished to discover that the coral reef, ",u:false},{t:"which",u:true},{t:" they had assumed was permanently damaged by rising ocean temperatures, ",u:false},{t:"have",u:true},{t:" begun to show remarkable signs of recovery, giving scientists renewed hope for the future of marine ",u:false},{t:"ecosystems",u:true},{t:" in the ",u:false},{t:"region",u:true},{t:"."}],answer:1,correct:"had",explanation:"主語「the coral reef（単数）」→ have → hadが正しい（時制も過去完了）。",syntax:"過去完了（had + 過去分詞）+ 単数主語。the coral reef had begun。",vocab:[{word:"coral reef",meaning:"サンゴ礁"},{word:"permanently",meaning:"永久に"},{word:"recovery",meaning:"回復"}]}
 ,{sentence:[{t:"The new building code requires that all newly constructed residential properties ",u:false},{t:"are",u:true},{t:" fitted with energy-efficient insulation, ",u:false},{t:"solar",u:true},{t:" panels, and advanced ",u:false},{t:"water",u:true},{t:" recycling systems as a condition of receiving a certificate of ",u:false},{t:"occupancy",u:true},{t:"."}],answer:0,correct:"be",explanation:"require that ～ の後は仮定法現在（動詞原形）。are → beが正しい。",syntax:"require that S + 動詞原形（仮定法現在）。be fitted = 取り付けられること。",vocab:[{word:"residential",meaning:"住宅の"},{word:"insulation",meaning:"断熱材"},{word:"occupancy",meaning:"入居"}]}
-,{sentence:[{t:"Decades of research on second language acquisition suggests that ",u:false},{t:"exposure",u:true},{t:" to authentic input—real-world texts and conversations rather than textbook examples—is particularly ",u:false},{t:"valuable",u:true},{t:" for developing ",u:false},{t:"fluent",u:true},{t:" and ",u:false},{t:"natural",u:true},{t:" communication skills."}],answer:0,correct:"suggest",explanation:"主語「Decades of research（複数）」→ suggests → suggestが正しい。",syntax:"Decades（複数主語）+ suggest。of research は修飾語で主語ではない。",vocab:[{word:"authentic",meaning:"本物の"},{word:"acquisition",meaning:"習得"},{word:"fluent",meaning:"流暢な"}]}
+,{sentence:[{t:"Decades of research on second language acquisition ",u:false},{t:"suggests",u:true},{t:" that ",u:false},{t:"exposure",u:true},{t:" to authentic input—real-world texts and conversations rather than textbook examples—is particularly ",u:false},{t:"valuable",u:true},{t:" for developing fluent and ",u:false},{t:"natural",u:true},{t:" communication skills."}],answer:0,correct:"suggest",explanation:"主語「Decades of research（複数）」→ suggests → suggestが正しい。",syntax:"Decades（複数主語）+ suggest。of research は修飾語で主語ではない。",vocab:[{word:"authentic",meaning:"本物の"},{word:"acquisition",meaning:"習得"},{word:"fluent",meaning:"流暢な"}]}
 ,{sentence:[{t:"The urban planner warned that the city's failure to invest in adequate public transportation infrastructure would ",u:false},{t:"inevitable",u:true},{t:" lead to increased traffic congestion, air pollution, and a ",u:false},{t:"significant",u:true},{t:" reduction in the overall quality of life for ",u:false},{t:"residents",u:true},{t:" in the coming ",u:false},{t:"decades",u:true},{t:"."}],answer:0,correct:"inevitably",explanation:"would lead（助動詞+動詞）を修飾するので副詞inevitably（不可避的に）が正しい。",syntax:"副詞（-ly）+ 動詞。would inevitably lead = 必然的につながるだろう。",vocab:[{word:"infrastructure",meaning:"インフラ"},{word:"congestion",meaning:"渋滞"},{word:"inevitably",meaning:"必然的に"}]}
 ,{sentence:[{t:"The research institute's annual report revealed that its scientists had ",u:false},{t:"file",u:true},{t:" more than three hundred patent applications, a record number that reflects the growing commercialization of basic scientific research within academia and ",u:false},{t:"industry",u:true},{t:", representing a significant shift in how ",u:false},{t:"universities",u:true},{t:" approach their ",u:false},{t:"mission",u:true}],answer:0,correct:"filed",explanation:"had file → had filed（過去完了）が正しい。",syntax:"had + 過去分詞（過去完了）。had filed = 申請していた。",vocab:[{word:"patent",meaning:"特許"},{word:"commercialization",meaning:"商業化"},{word:"reveal",meaning:"明らかにする"}]}
 ,{sentence:[{t:"Living standards have improved ",u:false},{t:"dramatic",u:true},{t:" since the market-oriented reforms of the early 1990s, a transformation that has lifted millions out of poverty and expanded the middle class, according to the latest ",u:false},{t:"World",u:true},{t:" Bank data, though significant ",u:false},{t:"inequality",u:true},{t:" remains in many ",u:false},{t:"regions",u:true}],answer:0,correct:"dramatically",explanation:"have improved（現在完了）を修飾するので副詞dramatically（劇的に）が正しい。",syntax:"have improved + 副詞（-ly）。dramatically improved = 劇的に改善した。",vocab:[{word:"living standard",meaning:"生活水準"},{word:"reform",meaning:"改革"},{word:"dramatically",meaning:"劇的に"}]}
@@ -573,9 +584,9 @@ const WE = [
 ,{sentence:[{t:"Researchers found that students who participated in extracurricular activities performed ",u:false},{t:"consistent",u:true},{t:" better on standardized tests and were more likely to be accepted into competitive universities than those who did not, regardless of their ",u:false},{t:"socioeconomic",u:true},{t:" background or the ",u:false},{t:"type",u:true},{t:" of activity ",u:false},{t:"pursued",u:true},{t:"."}],answer:0,correct:"consistently",explanation:"performed（動詞）を修飾するので副詞consistently（一貫して）が正しい。",syntax:"動詞 + 副詞（-ly）。performed consistently better = 一貫してより高いスコアを出した。",vocab:[{word:"extracurricular",meaning:"課外の"},{word:"standardized test",meaning:"標準化テスト"},{word:"consistently",meaning:"一貫して"}]}
 ,{sentence:[{t:"Despite receiving numerous awards and critical acclaim, the author's final novel was ",u:false},{t:"commercial",u:true},{t:" less successful than his earlier works, selling fewer than fifty thousand copies in its first year of publication, compared to the millions sold by his previous ",u:false},{t:"bestsellers",u:true},{t:" which had ",u:false},{t:"established",u:true},{t:" his ",u:false},{t:"reputation",u:true},{t:" by his previous bestsellers."}],answer:0,correct:"commercially",explanation:"was less successful（形容詞）を修飾するので副詞commercially（商業的に）が正しい。",syntax:"副詞（-ly）+ 形容詞。commercially less successful = 商業的にはあまり成功しなかった。",vocab:[{word:"acclaim",meaning:"称賛"},{word:"commercially",meaning:"商業的に"},{word:"bestseller",meaning:"ベストセラー"}]}
 ,{sentence:[{t:"The proposed merger between the two companies was ",u:false},{t:"blocking",u:true},{t:" by regulators who determined that it would significantly reduce market competition and harm consumers through higher prices and ",u:false},{t:"reduced",u:true},{t:" choice, a decision that the companies ",u:false},{t:"appealed",u:true},{t:" in ",u:false},{t:"court",u:true},{t:" choice."}],answer:0,correct:"blocked",explanation:"was + 過去分詞（受動態）。blocking → blockedが正しい。",syntax:"was + 過去分詞（受動態・過去形）。was blocked by = ～によって阻止された。",vocab:[{word:"merger",meaning:"合併"},{word:"regulator",meaning:"規制当局"},{word:"competition",meaning:"競争"}]}
-,{sentence:[{t:"The documentary filmmaker spent three years travelling through remote communities, carefully ",u:false},{t:"document",u:true},{t:" the traditional practices and oral histories of indigenous peoples whose ways of life are under increasing threat from the forces of globalization and modernization, a situation that ",u:false},{t:"demands",u:true},{t:" urgent ",u:false},{t:"attention",u:true},{t:" from the international ",u:false},{t:"community",u:true},{t:"."}],answer:1,correct:"documenting",explanation:"spent + 時間 + -ing（動名詞）の並列。travellling and documenting。carefully document → documenting。",syntax:"spend time + -ing, -ing（並列の動名詞）。carefully documenting = 注意深く記録しながら。",vocab:[{word:"indigenous",meaning:"先住民の"},{word:"oral history",meaning:"口承史"},{word:"globalization",meaning:"グローバル化"}]}
+,{sentence:[{t:"The documentary filmmaker spent three years travelling through remote communities, carefully ",u:false},{t:"document",u:true},{t:" the traditional practices and oral histories of indigenous peoples whose ways of life are under increasing threat from the forces of globalization and modernization, a situation that ",u:false},{t:"demands",u:true},{t:" urgent ",u:false},{t:"attention",u:true},{t:" from the international ",u:false},{t:"community",u:true},{t:"."}],answer:0,correct:"documenting",explanation:"spent + 時間 + -ing（動名詞）の並列。travellling and documenting。carefully document → documenting。",syntax:"spend time + -ing, -ing（並列の動名詞）。carefully documenting = 注意深く記録しながら。",vocab:[{word:"indigenous",meaning:"先住民の"},{word:"oral history",meaning:"口承史"},{word:"globalization",meaning:"グローバル化"}]}
 ,{sentence:[{t:"The study's authors acknowledge that their sample size was ",u:false},{t:"relative",u:true},{t:" small and that further research with larger and more diverse populations is needed before findings could be generalized, a limitation ",u:false},{t:"acknowledge",u:true},{t:" by the reviewers and ",u:false},{t:"discussed",u:true},{t:" in the paper's ",u:false},{t:"conclusion",u:true},{t:" with confidence."}],answer:0,correct:"relatively",explanation:"形容詞smallを修飾するので副詞relatively（比較的）が正しい。",syntax:"副詞（-ly）+ 形容詞。relatively small = 比較的小さい。",vocab:[{word:"sample size",meaning:"サンプルサイズ"},{word:"generalize",meaning:"一般化する"},{word:"relatively",meaning:"比較的"}]}
-,{sentence:[{t:"The thesis argues that economic inequality is not an inevitable consequence of capitalism but the result of specific policy choices that could be ",u:false},{t:"reversed",u:true},{t:" through progressive taxation and ",u:false},{t:"strengthen",u:true},{t:" social safety nets, a view that ",u:false},{t:"challenges",u:true},{t:" mainstream ",u:false},{t:"economics",u:true},{t:" social safety nets."}],answer:2,correct:"strengthened",explanation:"could be + 過去分詞（受動態）。strengthen → strengthenedが正しい。",syntax:"could be + 過去分詞（助動詞を含む受動態）。could be strengthened = 強化される可能性がある。",vocab:[{word:"inevitable",meaning:"不可避の"},{word:"progressive",meaning:"累進的な"},{word:"safety net",meaning:"セーフティーネット"}]}
+,{sentence:[{t:"The thesis argues that economic inequality is not an inevitable consequence of capitalism but the result of specific policy choices that could be ",u:false},{t:"reversed",u:true},{t:" through progressive taxation and ",u:false},{t:"strengthen",u:true},{t:" social safety nets, a view that ",u:false},{t:"challenges",u:true},{t:" mainstream ",u:false},{t:"economics",u:true},{t:" social safety nets."}],answer:1,correct:"strengthened",explanation:"could be + 過去分詞（受動態）。strengthen → strengthenedが正しい。",syntax:"could be + 過去分詞（助動詞を含む受動態）。could be strengthened = 強化される可能性がある。",vocab:[{word:"inevitable",meaning:"不可避の"},{word:"progressive",meaning:"累進的な"},{word:"safety net",meaning:"セーフティーネット"}]}
 ,{sentence:[{t:"The scientific community was deeply divided over the ",u:false},{t:"ethic",u:true},{t:" implications of the new gene-editing technology, with some arguing it offered revolutionary potential and others warning of risks of unintended consequences and misuse, a debate that ",u:false},{t:"reflects",u:true},{t:" broader tensions between scientific ",u:false},{t:"progress",u:true},{t:" and ",u:false},{t:"responsibility",u:true},{t:"."}],answer:0,correct:"ethical",explanation:"名詞implications を修飾するので形容詞ethical（倫理的な）が正しい。名詞ethicは不可。",syntax:"形容詞 + 名詞。ethical implications = 倫理的な影響。",vocab:[{word:"ethical",meaning:"倫理的な"},{word:"gene-editing",meaning:"遺伝子編集"},{word:"unintended",meaning:"意図しない"}]}
 ,{sentence:[{t:"The court determined that the defendant had failed to ",u:false},{t:"disclosure",u:true},{t:" material information to investors, violating securities laws and exposing the company to significant legal liability and potential ",u:false},{t:"financial",u:true},{t:" penalties, a ruling that sent a ",u:false},{t:"strong",u:true},{t:" signal to ",u:false},{t:"markets",u:true},{t:" penalties."}],answer:0,correct:"disclose",explanation:"had failed to + 動詞原形（不定詞）。disclosure → discloseが正しい。",syntax:"fail to + 動詞原形 = ～することに失敗する。had failed to disclose = 開示しなかった。",vocab:[{word:"disclosure",meaning:"開示"},{word:"securities law",meaning:"証券法"},{word:"liability",meaning:"法的責任"}]}
 ,{sentence:[{t:"The government's plan to construct a series of large desalination plants along the coastline has been hailed by some as a long-term solution, but environmentalists ",u:false},{t:"points",u:true},{t:" to the potentially severe ecological impacts on marine ecosystems, ",u:false},{t:"arguing",u:true},{t:" that the plants will ",u:false},{t:"significant",u:true},{t:" ",u:false},{t:"disrupt",u:true},{t:" coastal biodiversity."}],answer:2,correct:"significantly",explanation:"will + 副詞 + 動詞の語順。significantは形容詞なのでsignificantlyが正しい。",syntax:"be hailed as = ～として称えられる。hailed and criticized は並列の過去分詞。",vocab:[{word:"desalination",meaning:"海水淡水化"},{word:"chronic",meaning:"慢性的な"},{word:"ecological",meaning:"生態学的な"}]}
@@ -583,14 +594,14 @@ const WE = [
 ,{sentence:[{t:"The investigation revealed that data had been ",u:false},{t:"systematic",u:true},{t:" misrepresented in reports submitted to regulators, leading to an immediate suspension of the company's operating license pending a full independent audit of its financial records and ",u:false},{t:"broader",u:true},{t:" business ",u:false},{t:"practices",u:true},{t:" across all ",u:false},{t:"divisions",u:true},{t:"."}],answer:0,correct:"systematically",explanation:"had been misrepresented（受動態の過去完了）を修飾するので副詞systematically（組織的に）が正しい。",syntax:"had been + 副詞 + 過去分詞。had been systematically misrepresented = 組織的に歪曲されていた。",vocab:[{word:"misrepresent",meaning:"歪曲する"},{word:"suspension",meaning:"停止"},{word:"audit",meaning:"監査"}]}
 ,{sentence:[{t:"The sociologist argued that social mobility had ",u:false},{t:"significant",u:true},{t:" declined over the past three decades due to widening income inequality, rising housing costs, and the increasing difficulty of accessing quality education without substantial financial resources, creating a self-reinforcing ",u:false},{t:"cycle",u:true},{t:" of ",u:false},{t:"poverty",u:true},{t:" and ",u:false},{t:"exclusion",u:true},{t:" financial resources."}],answer:0,correct:"significantly",explanation:"had declined（過去完了）を修飾するので副詞significantly（大幅に）が正しい。",syntax:"had + 副詞 + 過去分詞。had significantly declined = 大幅に低下していた。",vocab:[{word:"social mobility",meaning:"社会的流動性"},{word:"inequality",meaning:"不平等"},{word:"substantially",meaning:"相当に"}]}
 ,{sentence:[{t:"The governing body announced it would commission an ",u:false},{t:"independence",u:true},{t:" review of the organization's governance structures and financial practices following allegations of misconduct and financial irregularities that had ",u:false},{t:"emerged",u:true},{t:" over the course of the previous ",u:false},{t:"fiscal",u:true},{t:" ",u:false},{t:"year",u:true},{t:" that had emerged in recent months."}],answer:0,correct:"independent",explanation:"名詞reviewを修飾するので形容詞independent（独立した）が正しい。independence（名詞）は不可。",syntax:"形容詞 + 名詞。an independent review = 独立した審査。",vocab:[{word:"commission",meaning:"委託する"},{word:"governance",meaning:"ガバナンス"},{word:"irregularity",meaning:"不正"}]}
-,{sentence:[{t:"Archaeologists uncovered what appears to be a previously undocumented burial chamber, which ",u:false},{t:"contain",u:true},{t:" artifacts suggesting a level of cultural sophistication far beyond what historians had previously believed possible for that ",u:false},{t:"period",u:true},{t:", prompting a significant ",u:false},{t:"reassessment",u:true},{t:" of the region's ancient ",u:false},{t:"history",u:true},{t:" artifacts suggesting a level of cultural sophistication far beyond what historians had previously believed possible for that period."}],answer:1,correct:"contains",explanation:"主語「which（先行詞はchamber・単数）」→ contain → contains（三単現）が正しい。",syntax:"関係代名詞which（先行詞が単数）+ 単数動詞。which contains = それは含んでいる。",vocab:[{word:"burial chamber",meaning:"埋葬室"},{word:"artifact",meaning:"遺物"},{word:"sophistication",meaning:"洗練・高度さ"}]}
+,{sentence:[{t:"Archaeologists uncovered what appears to be a previously undocumented burial chamber, which ",u:false},{t:"contain",u:true},{t:" artifacts suggesting a level of cultural sophistication far beyond what historians had previously believed possible for that ",u:false},{t:"period",u:true},{t:", prompting a significant ",u:false},{t:"reassessment",u:true},{t:" of the region's ancient ",u:false},{t:"history",u:true},{t:" artifacts suggesting a level of cultural sophistication far beyond what historians had previously believed possible for that period."}],answer:0,correct:"contains",explanation:"主語「which（先行詞はchamber・単数）」→ contain → contains（三単現）が正しい。",syntax:"関係代名詞which（先行詞が単数）+ 単数動詞。which contains = それは含んでいる。",vocab:[{word:"burial chamber",meaning:"埋葬室"},{word:"artifact",meaning:"遺物"},{word:"sophistication",meaning:"洗練・高度さ"}]}
 ,{sentence:[{t:"The prime minister's announcement of plans to increase defense spending was ",u:false},{t:"meet",u:true},{t:" with both approval and criticism, reflecting the deeply divided public opinion on military expenditure in a time of fiscal constraint, a debate that ",u:false},{t:"dominated",u:true},{t:" headlines for ",u:false},{t:"weeks",u:true},{t:" after the ",u:false},{t:"statement",u:true},{t:"."}],answer:0,correct:"met",explanation:"was met with（～で迎えられた）の受動態表現。meet → metが正しい。",syntax:"was met with ～ = ～で受け止められた。meet の過去形は met。",vocab:[{word:"defense spending",meaning:"防衛費"},{word:"expenditure",meaning:"支出"},{word:"fiscal constraint",meaning:"財政的制約"}]}
 ,{sentence:[{t:"The chairman emphasized that addressing the root causes of poverty and social exclusion required a ",u:false},{t:"sustain",u:true},{t:" commitment over many years and could not be achieved through short-term measures or one-time interventions, however ",u:false},{t:"well-funded",u:true},{t:" or ",u:false},{t:"well-intentioned",u:true},{t:" those efforts might ",u:false},{t:"be",u:true},{t:" interventions."}],answer:0,correct:"sustained",explanation:"required a sustained commitment（形容詞+名詞）。sustain（動詞）→ sustained（形容詞・過去分詞）。",syntax:"a + 形容詞（過去分詞）+ 名詞。a sustained commitment = 持続的なコミットメント。",vocab:[{word:"social exclusion",meaning:"社会的排除"},{word:"sustained",meaning:"持続的な"},{word:"intervention",meaning:"介入"}]}
 ,{sentence:[{t:"The study demonstrated conclusively that the medication was safe and effective, with side effects that were ",u:false},{t:"consider",u:true},{t:" mild and transient in the vast majority of patients, a finding that ",u:false},{t:"supports",u:true},{t:" the drug's approval for ",u:false},{t:"wider",u:true},{t:" clinical ",u:false},{t:"use",u:true},{t:" mild and transient in the vast majority of patients who participated in the clinical trial."}],answer:0,correct:"considered",explanation:"were considered（受動態）。consider → consideredが正しい。",syntax:"were + 過去分詞（受動態）。were considered mild = 軽度とみなされた。",vocab:[{word:"conclusively",meaning:"決定的に"},{word:"transient",meaning:"一時的な"},{word:"clinical trial",meaning:"臨床試験"}]}
 
 
 ,{sentence:[{t:"The delegation's proposal was ",u:false},{t:"initial",u:true},{t:" rejected by the committee, but after further negotiations a revised version was ",u:false},{t:"accepted",u:true},{t:" by all parties, representing a significant breakthrough in the long-running ",u:false},{t:"diplomatic",u:true},{t:" ",u:false},{t:"talks",u:true},{t:"."}],answer:0,correct:"initially",explanation:"was rejected（受動態）を修飾するので副詞initially（最初は）が正しい。",syntax:"be + 副詞 + 過去分詞。was initially rejected = 最初は否決された。",vocab:[{word:"initially",meaning:"最初は"},{word:"delegation",meaning:"代表団"},{word:"diplomatic",meaning:"外交的な"}]}
-,{sentence:[{t:"The scientists were unable to explain why the experiment's results different so ",u:false},{t:"significant",u:true},{t:" from the predicted outcomes, prompting them to reconsider several of their ",u:false},{t:"key",u:true},{t:" theoretical ",u:false},{t:"assumptions",u:true},{t:" about how the process was ",u:false},{t:"supposed",u:true},{t:" to work."}],answer:0,correct:"differed",explanation:"were unable to explain why the results differ → differed（過去形）。different は形容詞で動詞として使えない。",syntax:"differ from ～ = ～と異なる。動詞形はdiffer（三単現：differs、過去形：differed）。",vocab:[{word:"differ",meaning:"異なる"},{word:"predicted",meaning:"予測された"},{word:"assumption",meaning:"前提"}]}
+,{sentence:[{t:"The scientists were unable to explain why the experiment's results ",u:false},{t:"different",u:true},{t:" so significantly from the predicted outcomes, prompting them to reconsider several of their ",u:false},{t:"key",u:true},{t:" theoretical ",u:false},{t:"assumptions",u:true},{t:" about how the process was ",u:false},{t:"supposed",u:true},{t:" to work."}],answer:0,correct:"differed",explanation:"were unable to explain why the results differ → differed（過去形）。different は形容詞で動詞として使えない。",syntax:"differ from ～ = ～と異なる。動詞形はdiffer（三単現：differs、過去形：differed）。",vocab:[{word:"differ",meaning:"異なる"},{word:"predicted",meaning:"予測された"},{word:"assumption",meaning:"前提"}]}
 ,{sentence:[{t:"The company's decision to pursue an aggressive growth strategy despite the challenging economic environment has been ",u:false},{t:"wide",u:true},{t:" viewed as both bold and ",u:false},{t:"risky",u:true},{t:" by analysts, many of ",u:false},{t:"whom",u:true},{t:" have expressed doubts about its long-term ",u:false},{t:"sustainability",u:true},{t:"."}],answer:0,correct:"widely",explanation:"has been viewed（受動態）を修飾するので副詞widely（広く）が正しい。",syntax:"be + 副詞 + 過去分詞。has been widely viewed = 広くみなされてきた。",vocab:[{word:"widely",meaning:"広く"},{word:"sustainability",meaning:"持続可能性"},{word:"aggressive",meaning:"積極的な"}]}
 ,{sentence:[{t:"The proposed changes to the education system, which would ",u:false},{t:"affect",u:true},{t:" millions of students nationwide, were announced ",u:false},{t:"without",u:true},{t:" adequate consultation with teachers, parents, and other ",u:false},{t:"stakeholder",u:true},{t:" groups, a decision that drew ",u:false},{t:"widespread",u:true},{t:" criticism."}],answer:2,correct:"stakeholders",explanation:"「teachers, parents, and other stakeholders（複数）」の並列。stakeholder → stakeholders。",syntax:"other + 可算名詞複数形。other stakeholders = 他の利害関係者たち。",vocab:[{word:"stakeholder",meaning:"利害関係者"},{word:"adequate",meaning:"十分な"},{word:"widespread",meaning:"広範な"}]}
 ,
@@ -1564,19 +1575,24 @@ function s3LoadPassage(){
     const card=document.createElement('div');
     card.className='s3-qcard';
     const hdr=document.createElement('div');
-    hdr.className='s3-qcard-hdr';
-    hdr.innerHTML=`<span class="s3-qnum">Q${qi+1}</span><span class="s3-ans-mark" id="s3Mark${qi}"></span>`;
+    hdr.className='s3-qcard-hdr';hdr.style.cursor='pointer';
+    hdr.innerHTML=`<div class="s3-qnum-wrap"><span class="s3-qnum pulse" id="s3Qnum${qi}">Q${qi+1}</span><span class="s3-click-label" id="s3ClickLabel${qi}">← ここをクリック！</span></div><span class="s3-ans-mark" id="s3Mark${qi}"></span>`;
+    hdr.addEventListener('click',()=>s3SetActiveQ(qi,true));
     const bd=document.createElement('div');
     bd.className='s3-qcard-body';
     const qt=document.createElement('div');
     qt.className='s3-qtext';qt.textContent=q.q;
     qt.style.cursor='pointer';
-    qt.addEventListener('click',()=>s3SetActiveQ(qi));
+    qt.addEventListener('click',()=>s3SetActiveQ(qi,true));
     bd.appendChild(qt);
     // evidence hint
     const hint=document.createElement('div');
     hint.className='s3-ev-hint';hint.id=`s3Hint${qi}`;
-    hint.innerHTML=`<span class="ev-icon">👆</span><div><div class="ev-main" id="s3HintMain${qi}">問題をクリック → 根拠文をクリック</div><div class="ev-excerpt" id="s3HintEx${qi}"></div></div>`;
+    hint.innerHTML=`<div class="s3-steps">
+  <div class="s3-step active" id="s3Step${qi}_1"><span class="s3-step-num">1</span><span class="s3-step-text">この問題カードをクリックして「選択中」にする</span></div>
+  <div class="s3-step" id="s3Step${qi}_2"><span class="s3-step-num">2</span><span class="s3-step-text">左の選択肢（A〜D）をクリックして答えを選ぶ</span></div>
+  <div class="s3-step" id="s3Step${qi}_3"><span class="s3-step-num">3</span><span class="s3-step-text">パッセージ内の根拠の文をクリックして選択する</span></div>
+</div><div class="s3-ev-excerpt" id="s3HintEx${qi}"></div>`;
     bd.appendChild(hint);
     const ch=document.createElement('div');
     ch.className='s3-choices';
@@ -1586,7 +1602,7 @@ function s3LoadPassage(){
       const lbl=document.createElement('span');
       lbl.className='s3-clabel';lbl.textContent=labels[ci];
       btn.appendChild(lbl);btn.appendChild(document.createTextNode(' '+ct));
-      btn.addEventListener('click',()=>{s3SetActiveQ(qi);s3SelectChoice(qi,ci);});
+      btn.addEventListener('click',()=>{s3SetActiveQ(qi,true);s3SelectChoice(qi,ci);});
       ch.appendChild(btn);
     });
     bd.appendChild(ch);card.appendChild(hdr);card.appendChild(bd);
@@ -1601,7 +1617,6 @@ function s3LoadPassage(){
   qp.appendChild(submitBtn);
   body.appendChild(qp);
 
-  s3SetActiveQ(0);
   s3StartTimer();
 }
 
@@ -1619,12 +1634,22 @@ function splitSentences(text){
   return result;
 }
 
-function s3SetActiveQ(qi){
+function s3SetActiveQ(qi, byUser=false){
   s3ActiveQ=qi;
   document.querySelectorAll('.s3-qcard').forEach((c,i)=>{
-    c.style.borderColor=i===qi?'var(--s3)':'';
-    c.style.boxShadow=i===qi?'0 0 0 2px var(--s3-light)':'';
-    c.classList.toggle('active',i===qi);
+    const isActive=i===qi;
+    const qnum=document.getElementById(`s3Qnum${i}`);
+    const isPulsing=qnum&&qnum.classList.contains('pulse');
+    if(isActive && !isPulsing){
+      // ユーザーがすでにクリック済み（pulse消し済み）→ 緑の実線枠
+      c.style.borderColor='var(--s3)';
+      c.style.boxShadow='0 0 0 2px var(--s3-light)';
+    } else {
+      // 未クリック（pulse中）または非アクティブ → inline style なし、CSS に任せる
+      c.style.borderColor='';
+      c.style.boxShadow='';
+    }
+    c.classList.toggle('active',isActive);
   });
   // パッセージの選択をリセット、保存済みのエビデンスを表示
   document.querySelectorAll('.s3-passage-sentence').forEach(s=>s.classList.remove('sel'));
@@ -1633,6 +1658,36 @@ function s3SetActiveQ(qi){
       if(s.dataset.text===s3Evidence[qi])s.classList.add('sel');
     });
   }
+  s3RefreshSteps(qi, byUser);
+}
+
+function s3RefreshSteps(qi, byUser=false){
+  const hasAnswer=s3Answers.hasOwnProperty(qi);
+  const hasEvidence=!!s3Evidence[qi];
+  const s1=document.getElementById(`s3Step${qi}_1`);
+  const s2=document.getElementById(`s3Step${qi}_2`);
+  const s3el=document.getElementById(`s3Step${qi}_3`);
+  if(!s1)return;
+  // 破線・ラベルを消すのは「自分でクリック」か「すでに回答済み」の時だけ
+  if(byUser || hasAnswer || hasEvidence){
+    const qnum=document.getElementById(`s3Qnum${qi}`);
+    const lbl=document.getElementById(`s3ClickLabel${qi}`);
+    if(qnum)qnum.classList.remove('pulse');
+    if(lbl)lbl.classList.add('hidden');
+    // step 1 done
+    s1.className='s3-step done';
+    if(hasAnswer&&hasEvidence){
+      s2.className='s3-step done';
+      s3el.className='s3-step done';
+    } else if(hasAnswer){
+      s2.className='s3-step done';
+      s3el.className='s3-step active';
+    } else {
+      s2.className='s3-step active';
+      s3el.className='s3-step';
+    }
+  }
+  // byUser=false かつ未回答・未根拠 → 破線はそのまま（何もしない）
 }
 
 function s3SelectEvidence(el){
@@ -1642,11 +1697,10 @@ function s3SelectEvidence(el){
   el.classList.add('sel');
   s3Evidence[qi]=el.dataset.text;
   const hint=document.getElementById(`s3Hint${qi}`);
-  const main=document.getElementById(`s3HintMain${qi}`);
   const ex=document.getElementById(`s3HintEx${qi}`);
   if(hint)hint.classList.add('ev-sel');
-  if(main)main.textContent='✅ 根拠文を選択しました！';
-  if(ex){const t=el.dataset.text;ex.textContent=t.length>48?t.slice(0,48)+'…':t;}
+  if(ex){const t=el.dataset.text;ex.textContent='📌 根拠: '+(t.length>60?t.slice(0,60)+'…':t);}
+  s3RefreshSteps(qi);
   s3UpdateSubmit();
 }
 
@@ -1660,10 +1714,8 @@ function s3SelectChoice(qi,ci){
   const cards=document.querySelectorAll('.s3-qcard');if(cards[qi])cards[qi].classList.add('answered');
   const mark=document.getElementById(`s3Mark${qi}`);
   if(mark){mark.textContent='✓ 回答済み';mark.style.display='inline';mark.style.color='var(--green)';}
+  s3RefreshSteps(qi);
   s3UpdateSubmit();
-  // 次の未回答へ
-  const nextUnanswered=p.questions.findIndex((_,i)=>i>qi&&!s3Answers.hasOwnProperty(i));
-  if(nextUnanswered>=0)s3SetActiveQ(nextUnanswered);
 }
 
 function s3UpdateSubmit(){
